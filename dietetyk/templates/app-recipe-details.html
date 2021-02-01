@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+<div class="dashboard-content border-dashed p-3 m-4 view-height">
+
+    <div class="mt-4 ml-4 mr-4">
+        <div class="row border-bottom border-3">
+            <div class="col"><h3 class="color-header text-uppercase">RECIPE DETAILS</h3></div>
+            <div class="col d-flex justify-content-end mb-2 noPadding">
+            <a href="../../plan/add-recipe/"
+               class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Add Recipe to Plan</a>
+            </div>
+
+            <div class="col d-flex justify-content-end mb-2"><a
+                    href="../../recipe/list/"
+                    class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Back</a>
+            </div>
+        </div>
+
+        <table class="table borderless">
+            <tbody>
+            <tr class="d-flex">
+                <th scope="row" class="col-2">Name</th>
+                <td class="col-7">
+                    {{recipe.name}}
+                </td>
+            </tr>
+            <tr class="d-flex">
+                <th scope="row" class="col-2">Description</th>
+                <td class="col-7">{{recipe.description}}
+                </td>
+            </tr>
+            <tr class="d-flex">
+                <th scope="row" class="col-2">Preparation time</th>
+                <td class="col-7">
+                    {{recipe.preparation_time}}
+                </td>
+            </tr>
+             <tr class="d-flex">
+                <th scope="row" class="col-2">Number of likes</th>
+                <td class="col-7">
+                    {{recipe.votes}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="row d-flex">
+            <div class="col-5 border-bottom border-3"><h3
+                    class="text-uppercase">PREPARATION</h3></div>
+            <div class="col-2"></div>
+            <div class="col-5 border-bottom border-3"><h3
+                    class="text-uppercase">INGREDIENTS</h3></div>
+        </div>
+        <div class="row d-flex">
+            <div class="col-5 p-4">
+                <p>{{recipe.preparation}}</p>
+            </div>
+            <div class="col-2"></div>
+            <ul class="col-5 p-4 list-unstyled">
+                <li><pre>{{recipe.ingredients}}</pre></li>
+            </ul>
+        </div>
+        <div class="col d-flex justify-content-end mb-2">
+            <form action="" method="post">
+                <label for="votes"></label><br>
+                <input type="hidden" id="votes" name="votes" value="{{ recipe.id }}"><br>
+                <input type="submit" name="rating" value="Like" class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">
+                <input type="submit" name="rating" value="UnLike" class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

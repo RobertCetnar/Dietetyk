@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from dietetyk.views import landing_page_view, recipe_view, Dashboard
+from dietetyk.views import landing_page_view, Dashboard, RecipeList, RecipeDetails
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", landing_page_view),
-    path("recipe/list/", recipe_view),
     path("main/", Dashboard.as_view(), name="main"),
+    path("recipe/list/", RecipeList.as_view()),
+    path("recipe/<int:id>/", RecipeDetails.as_view()),
 ]

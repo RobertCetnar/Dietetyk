@@ -1,19 +1,15 @@
 from random import shuffle
 
-from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.shortcuts import render, redirect
 from django.views import View
 
 from .models import Recipe, Plan, Dayname, Recipeplan
-
 
 def landing_page_view(request):
     recipes = list(Recipe.objects.all())
     shuffle(recipes)
     return render(request, "index.html", {"recipes": recipes})
-
-
-def recipe_view(request):
-    return render(request, "dashboard.html")
 
 
 class Dashboard(View):
@@ -35,3 +31,38 @@ class Dashboard(View):
             "dashboard.html",
             {"r_count": recipe_count, "p_count": plan_count, "last_plan": last_plan, "days": days},
         )
+
+
+class RecipeList(View):
+    def get(self, request):
+        recipes = Recipe.objects.all().order_by("-votes", "created")
+        paginator = Paginator(recipes, 50)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        return render(
+            request, "app-recipes.html", {"recipes": recipes, "page_obj": page_obj}
+        )
+
+
+class RecipeDetails(View):
+    def get(self, request, id):
+        recipe = Recipe.objects.get(pk=id)
+        return render(
+            request,
+            "app-recipe-details.html",
+            {"recipe": recipe},
+        )
+    def post(self, request, id):
+        id_form = int(request.POST.get("votes"))
+        recipe_db = Recipe.objects.get(pk=id)
+        if request.POST.get("rating") == "Polub":
+            recipe_db.votes += 1
+            recipe_db.save()
+            return redirect(f"/recipe/{id}/")
+        elif request.POST.get("rating") == "Nie lubie":
+            recipe_db.votes -= 1
+            if recipe_db.votes < 0:
+                recipe_db.votes = 0
+            recipe_db.save()
+            return redirect(f"/recipe/{id}/")
