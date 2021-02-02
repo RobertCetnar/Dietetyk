@@ -66,3 +66,30 @@ class RecipeDetails(View):
                 recipe_db.votes = 0
             recipe_db.save()
             return redirect(f"/recipe/{id}/")
+
+
+class AddRecipe(View):
+    def get(self, request):
+        return render(request, "app-add-recipe.html")
+
+    def post(self, request):
+        name = request.POST.get("name")
+        ingredients = request.POST.get("ingredients")
+        description = request.POST.get("description")
+        preparation = request.POST.get("preparation")
+        preparation_time = int(request.POST.get("prep_time"))
+        if not name and not ingredients and not description and not preparation_time:
+            return render(
+                request, "app-add-recipe.html", {"error": "Fields cannot be empty !!!"}
+            )
+        else:
+            recipe = Recipe()
+            recipe.name = name
+            recipe.ingredients = ingredients
+            recipe.description = description
+            recipe.preparation = preparation
+            recipe.preparation_time = preparation_time
+            recipe.save()
+            return redirect("/recipe/list/")
+
+
