@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from dietetyk.views import landing_page_view, Dashboard, RecipeList, RecipeDetails, AddRecipe, ModifyRecipe
+from dietetyk.views import landing_page_view, Dashboard, RecipeList, RecipeDetails, AddRecipe, ModifyRecipe, DeleteRecipe
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +26,5 @@ urlpatterns = [
     path("recipe/<int:id>/", RecipeDetails.as_view()),
     path("recipe/add/", AddRecipe.as_view()),
     path("recipe/modify/<int:id>/", ModifyRecipe.as_view()),
+    path("recipe/delete/<int:id>/", DeleteRecipe.as_view()),
 ]

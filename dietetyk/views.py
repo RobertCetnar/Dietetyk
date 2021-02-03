@@ -116,3 +116,11 @@ class ModifyRecipe(View):
             recipe.preparation_time = preparation_time
             recipe.save()
             return redirect(f"/recipe/{id}/")
+
+
+class DeleteRecipe(View):
+    def get(self, request, id):
+        recipe_to_delete = Recipe.objects.get(pk=id)
+        recipe_to_delete.delete()
+        return render(request, "dashboard.html")
+
