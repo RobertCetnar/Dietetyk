@@ -124,3 +124,28 @@ class DeleteRecipe(View):
         recipe_to_delete.delete()
         return render(request, "dashboard.html")
 
+
+class PlanList(View):
+    def get(self, request):
+        plan_list = Plan.objects.all().order_by("name", "-created")
+        paginator = Paginator(plan_list, 5)
+        page = request.GET.get("page")
+        page_obj = paginator.get_page(page)
+        return render(request, "app-schedules.html", {"page_obj": page_obj})
+
+
+class PlanDetails(View):
+    def get(self, request, id):
+        days = []
+        plan = Plan.objects.get(pk=id)
+        all_days = Dayname.objects.all()
+        for day in all_days:
+            recipeplan = Recipeplan.objects.filter(plan=id).filter(day_name=day.id).order_by("order")
+            if recipeplan:
+                days += [
+                    {"name": day, "meals": recipeplan}
+                ]
+        return render(request, "app-details-schedules.html",
+                              {"days": days, "plan": plan})
+
+
