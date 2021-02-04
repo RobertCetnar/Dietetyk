@@ -149,3 +149,22 @@ class PlanDetails(View):
                               {"days": days, "plan": plan})
 
 
+class AddPlan(View):
+    def get(self, request):
+        return render(request, "app-add-schedules.html")
+
+    def post(self, request):
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        if not name and not description:
+            return render(
+                request,
+                "app-add-schedules.html",
+                {"error": "Fields cannot be empty !!!"},
+            )
+        else:
+            plan = Plan()
+            plan.name = name
+            plan.description = description
+            plan.save()
+            return redirect("/plan/list/")
