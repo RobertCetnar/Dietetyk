@@ -168,3 +168,15 @@ class AddPlan(View):
             plan.description = description
             plan.save()
             return redirect("/plan/list/")
+
+
+class ModifyPlan(View):
+    def get(self, request, id):
+        return render(request, "app-edit-schedules.html")
+
+
+class DeletePlan(View):
+    def get(self, request, id):
+        plan_to_delete = Plan.objects.get(pk=id)
+        plan_to_delete.delete()
+        return render(request, "dashboard.html")
