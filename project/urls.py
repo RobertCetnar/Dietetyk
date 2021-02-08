@@ -28,6 +28,7 @@ from dietetyk.views import (landing_page_view,
                             AddPlan,
                             ModifyPlan,
                             DeletePlan,
+                            AddPlanRecipe
                             )
 
 urlpatterns = [
@@ -44,4 +45,5 @@ urlpatterns = [
     path("plan/add/", AddPlan.as_view()),
     path("plan/modify/<int:id>/", ModifyPlan.as_view()),
     path("plan/delete/<int:id>/", DeletePlan.as_view()),
+    path("plan/add-recipe/", AddPlanRecipe.as_view()),
 ]

@@ -180,3 +180,27 @@ class DeletePlan(View):
         plan_to_delete = Plan.objects.get(pk=id)
         plan_to_delete.delete()
         return render(request, "dashboard.html")
+
+
+class AddPlanRecipe(View):
+    def get(self, request):
+        plans_list = Plan.objects.all()
+        recipes_list = Recipe.objects.all()
+        days = Dayname.objects.all()
+        context = {"plans_list": plans_list, "recipes_list": recipes_list, "days": days}
+        return render(request, "app-schedules-meal-recipe.html", context)
+
+    def post(self, request):
+        plan = int(request.POST.get("choosePlan"))
+        meal = request.POST.get("meal")
+        meal_number = int(request.POST.get("number"))
+        recipe = int(request.POST.get("recipe"))
+        day = int(request.POST.get("day"))
+        recipeplan = Recipeplan()
+        recipeplan.meal_name = meal
+        recipeplan.recipe = Recipe.objects.get(pk=recipe)
+        recipeplan.plan = Plan.objects.get(pk=plan)
+        recipeplan.order = meal_number
+        recipeplan.day_name = Dayname.objects.get(pk=day)
+        recipeplan.save()
+        return redirect(f"/plan/{plan}/")
